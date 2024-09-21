@@ -1,0 +1,63 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/LogoutButton.astro";
+import hasProfile from "../utils/profile";
+
+const cookie: string = `${Astro.cookies.get(import.meta.env.COOKIE_NAME || "_Security_Login_")?.value}`;
+const d = hasProfile(cookie, import.meta.env.COOKIE_SECRET || "secret");
+console.log("data on the index")
+console.log(d);
+ if (d.success === false) {
+ // authintecation
+   return Astro.redirect("/login");
+ }
+//After working on the task for 4 days on a laptop with very modest specifications,
+ //this is what I was able to accomplish after 8 hours over the 4 days.
+ //I apologize for not completing the tasks, 
+//but they require a laptop with higher specifications than what I currently have.
+ //Thank you for your time.
+  const response = await fetch('http://127.0.0.1:1337/api/products');
+const result = await response.json();
+const products   = result.error;
+console.log("products")
+console.log(products);
+
+---
+
+<Layout page="Home">
+  <div class="container">
+    <div class="index">
+      <center class="login">
+        {d.success === true?<h1>Welcome, {d.username}
+        
+        <a href="/product" class="create-post-link">Create New Product</a> 
+        
+        </h1>: <>
+        <h1>Welcome, Guest</h1>
+        <p>Please <a href="/login">Login</a> or <a href="/register">Register</a>.</p>
+      </>}
+        <br />
+        <h2>Posts from Strapi</h2>
+    <ul>
+		{products?(products.map(product => (
+		  <li key={product.id}>
+			<h2>{product.attributes.title}</h2>
+			<p>{product.attributes.price}</p>
+			<small>Published at: {new Date(product.attributes.publishedAt).toLocaleDateString()}</small>
+		  </li>
+		))):<></>}
+	  </ul>
+    {d.success === true?<Button />:<h1>  </h1>}    
+    
+      </center>
+      <div class="quote">
+        <center>
+          <span
+            >by Fajer, , 
+             </span
+          >
+        </center>
+      </div>
+    </div>
+  </div>
+</Layout>

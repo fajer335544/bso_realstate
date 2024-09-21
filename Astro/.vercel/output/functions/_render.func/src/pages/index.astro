@@ -1,0 +1,57 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/LogoutButton.astro";
+import hasProfile from "../utils/profile";
+
+const cookie: string = `${Astro.cookies.get(import.meta.env.COOKIE_NAME || "_Security_Login_")?.value}`;
+const d = hasProfile(cookie, import.meta.env.COOKIE_SECRET || "secret");
+console.log("data on the index")
+console.log(d);
+// if (d.success === false) {
+//   return Astro.redirect("/login");
+// }
+
+  const response = await fetch('http://127.0.0.1:1337/api/products');
+const result = await response.json();
+const posts = result.data;
+console.log(posts);
+
+---
+
+<Layout page="Home">
+  <div class="container">
+    <div class="index">
+      <center class="login">
+        {d.success === true?<h1>Welcome, {d.username}
+        
+        <a href="/create-post" class="create-post-link">Create New Post</a> 
+        
+        </h1>: <>
+        <h1>Welcome, Guest</h1>
+        <p>Please <a href="/login">Login</a> or <a href="/register">Register</a>.</p>
+      </>}
+        <br />
+        <h2>Posts from Strapi</h2>
+    <ul>
+		{posts?(posts.map(post => (
+		  <li key={post.id}>
+			<h2>{post.attributes.title}</h2>
+			<p>{post.attributes.price}</p>
+			<small>Published at: {new Date(post.attributes.publishedAt).toLocaleDateString()}</small>
+		  </li>
+		))):<></>}
+	  </ul>
+    {d.success === true?<Button />:<h1>  </h1>}    
+    
+      </center>
+      <div class="quote">
+        <center>
+          <span
+            >by Fajer, , 
+             </span
+          >
+        </center>
+      </div>
+    </div>
+  </div>
+</Layout>

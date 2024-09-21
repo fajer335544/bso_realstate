@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CreatePostForm from "../components/CreateProductForm.astro";
+import hasProfile from "../utils/profile";
+
+const token: string = `${Astro.cookies.get(import.meta.env.COOKIE_NAME || "_Security_Login_")?.value}`;
+const d = hasProfile(token, import.meta.env.COOKIE_SECRET || "secret");
+// d= { success: true, identifier: 'test2@test.com', username: 'test2' }
+
+if (d.success === false) {
+  return Astro.redirect("/login");
+}
+
+const error = new URL(Astro.request.url).searchParams.get("error");
+---
+
+<Layout page="Create Post">
+  <div class={`container ${error === "true" ? "error-active" : ""}`}>
+    {error === "true" && (
+      <div class="error-message">
+        <p>Error: Could not create post. Please try again.</p>
+      </div>
+    )}
+    <div class="create-post">
+      <h1>Create New Post</h1>
+      <CreatePostForm />
+    </div>
+  </div>
+</Layout>

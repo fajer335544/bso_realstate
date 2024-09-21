@@ -1,0 +1,9 @@
+npm install 
+npm run build
+npm start
+
+After working on the task for 4 days on a laptop with very modest specifications,
+ this is what I was able to accomplish after 8 hours over the 4 days.
+ I apologize for not completing the tasks, 
+but they require a laptop with higher specifications than what I currently have.
+ Thank you for your time.
